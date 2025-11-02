@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Abdurrazak Khalifa — Portfolio</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- AOS (Animate On Scroll) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --dark-blue:#03142b;     /* page background */
+      --blue:#0b69ff;         /* primary blue */
+      --orange:#ff7a00;       /* accent orange */
+      --muted:#9aa6b2;
+      --card:#071a2b;
+      --glass: rgba(255,255,255,0.03);
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background: linear-gradient(180deg, var(--dark-blue) 0%, #021122 100%);
+      color:#e6f0ff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      scroll-behavior:smooth;
+    }
+
+    /* Navbar */
+    .navbar{
+      background: transparent;
+      backdrop-filter: blur(6px);
+      padding-top: 0.6rem;
+      padding-bottom: 0.6rem;
+    }
+    .navbar-brand { font-weight:800; color:var(--blue) !important; }
+    .nav-link { color: rgba(230,240,255,0.85) !important; font-weight:600 }
+
+    /* HERO */
+    #hero{
+      position:relative;
+      min-height:90vh;
+      display:flex;
+      align-items:center;
+      padding-top:4rem;
+      padding-bottom:4rem;
+      overflow:hidden;
+    }
+    /* Lottie background container */
+    #lottie-bg{
+      position:absolute;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity:0.95;
+      mix-blend-mode:screen;
+    }
+    .hero-content{
+      position:relative;
+      z-index:3;
+    }
+    .name {
+      font-size: clamp(2rem, 4.8vw, 3.6rem);
+      font-weight:900;
+      letter-spacing:-0.02em;
+      color:var(--blue);
+    }
+    .title {
+      font-size: clamp(1rem, 2.2vw, 1.15rem);
+      color: #cfe6ff;
+      margin-bottom:0.5rem;
+    }
+    .typing {
+      color: #fff;
+      font-weight:700;
+    }
+
+    /* glass card */
+    .card-ghost {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    section { padding: 5rem 0; }
+
+    /* Skills */
+    .skill { margin-bottom:1rem; }
+    .skill .label { font-weight:700; color: #dbeeff; }
+    .progress { height:12px; border-radius:12px; background: rgba(255,255,255,0.04); }
+
+    /* Projects */
+    .project-card { border-radius:12px; overflow:hidden; transition: transform .25s ease, box-shadow .25s ease; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
+    .project-card:hover { transform: translateY(-10px) rotate(-0.5deg); box-shadow: 0 24px 60px rgba(2,6,23,0.7); }
+    .project-badge { position:absolute; top:12px; right:12px; background: rgba(255,122,0,0.14); color:var(--orange); padding:6px 10px; border-radius:999px; font-weight:700; }
+
+    /* Contact */
+    .contact-card { padding: 1.75rem; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.03); }
+
+    /* Footer */
+    footer { padding:2.5rem 0; color:var(--muted); }
+
+    /* Small helpers */
+    .muted { color:var(--muted); }
+    .glass {
+      background: var(--glass);
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 6px 22px rgba(0,0,0,0.6);
+      border:1px solid rgba(255,255,255,0.02);
+    }
+
+    /* AOS custom durations (override) */
+    [data-aos] { opacity:0; transform-origin:center; transition-property: opacity, transform; }
+
+    /* responsive tweaks */
+    @media (max-width: 768px) {
+      #hero { min-height:72vh; padding-top:2rem; padding-bottom:2rem; }
+      #lottie-bg { opacity:0.75; }
+    }
+
+    /* progress animation when width set by JS */
+    .progress-bar {
+      transition: width 1.2s cubic-bezier(.2,.9,.2,1);
+      background: linear-gradient(90deg, var(--orange), var(--blue));
+    }
+
+    /* vivid accent outlines */
+    .btn-primary {
+      background: linear-gradient(90deg, var(--blue), #1a8bff);
+      border: none;
+      box-shadow: 0 8px 24px rgba(11,105,255,0.12);
+    }
+    .btn-outline-primary {
+      color:var(--blue);
+      border-color: rgba(11,105,255,0.15);
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#hero">Abdurrazak Khalifa</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"><i class="fa fa-bars" style="color:#fff"></i></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto gap-2">
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+        <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header id="hero" class="d-flex align-items-center">
+  <!-- Lottie background container -->
+  <div id="lottie-bg" aria-hidden="true"></div>
+
+  <div class="container hero-content">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <div data-aos="fade-right" data-aos-duration="1000" data-aos-easing="ease-in-out" data-aos-delay="200">
+          <p class="muted mb-2">Hello, I'm</p>
+          <h1 class="name mb-2">Abdurrazak Khalifa</h1>
+          <div class="title mb-3">Front-End Developer • Backend Developer • Cybersecurity Analyst</div>
+
+          <div class="mb-4">
+            <span class="typing" id="typing"></span>
+            <span class="muted"> — building fast, secure, and delightful user experiences.</span>
+          </div>
+
+          <div class="d-flex gap-2">
+            <a class="btn btn-primary btn-lg" href="#projects"><i class="fa fa-briefcase me-2"></i>See Projects</a>
+            <a class="btn btn-outline-primary btn-lg" href="#contact"><i class="fa fa-envelope me-2"></i>Contact Me</a>
+          </div>
+
+          <div class="mt-4 muted">
+            <a class="me-3 text-muted" href="#" id="github-link"><i class="fa-brands fa-github fa-lg"></i></a>
+            <a class="me-3 text-muted" href="#" id="linkedin-link"><i class="fa-brands fa-linkedin fa-lg"></i></a>
+            <a class="text-muted" href="#" id="twitter-link"><i class="fa-brands fa-x fa-lg"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5 d-none d-lg-block">
+        <div class="card card-ghost p-4" data-aos="zoom-in" data-aos-duration="900" data-aos-delay="400">
+          <div class="d-flex align-items-center gap-3">
+            <img src="https://via.placeholder.com/110" alt="profile" class="rounded-circle" width="110" height="110">
+            <div>
+              <h5 class="mb-0">Abdurrazak Khalifa</h5>
+              <div class="muted">Front-End · Backend · Cybersecurity</div>
+              <div class="mt-2">
+                <small class="muted">Based in Nigeria</small>
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-3">
+
+          <div class="muted small">
+            <strong>Stack:</strong> HTML, CSS, JavaScript, Bootstrap, Node.js, Express, PostgreSQL, Docker, Burp Suite
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-6" data-aos="flip-left" data-aos-duration="1000">
+        <div class="card card-ghost p-4">
+          <h3>About me</h3>
+          <p class="muted">I’m a front-end and backend developer with an interest in cybersecurity. I build fast, accessible user interfaces and secure backend services. I enjoy learning new frameworks and making projects that solve real problems.</p>
+          <ul class="list-unstyled">
+            <li><strong>Experience:</strong> Web apps, APIs, pentesting basics</li>
+            <li><strong>Tools:</strong> VSCode, Git, Docker, Linux</li>
+            <li><strong>Languages:</strong> JavaScript (ES6+), Python</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-lg-6" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+        <div class="glass">
+          <h5 class="mb-3">Quick Stats</h5>
+          <div class="d-flex justify-content-between">
+            <div>
+              <h4 class="mb-0">8+</h4>
+              <small class="muted">Projects</small>
+            </div>
+            <div>
+              <h4 class="mb-0">3</h4>
+              <small class="muted">Skills Focus</small>
+            </div>
+            <div>
+              <h4 class="mb-0">1</h4>
+              <small class="muted">Certifications</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="bg-dark" style="background:transparent;">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-6" data-aos="fade-up" data-aos-duration="900">
+        <h3>Skills</h3>
+        <p class="muted">Front-End, Back-End and Cybersecurity skills with animated progress bars.</p>
+
+        <div class="skill">
+          <div class="d-flex justify-content-between mb-1">
+            <div class="label">Front-End (HTML/CSS/JS/Bootstrap)</div><div class="muted">85%</div>
+          </div>
+          <div class="progress"><div class="progress-bar" role="progressbar" style="width:0" data-width="85"></div></div>
+        </div>
+
+        <div class="skill">
+          <div class="d-flex justify-content-between mb-1">
+            <div class="label">Back-End (Node, Express, DB)</div><div class="muted">75%</div>
+          </div>
+          <div class="progress"><div class="progress-bar" role="progressbar" style="width:0" data-width="75"></div></div>
+        </div>
+
+        <div class="skill">
+          <div class="d-flex justify-content-between mb-1">
+            <div class="label">Cybersecurity (Pentesting basics)</div><div class="muted">70%</div>
+          </div>
+          <div class="progress"><div class="progress-bar" role="progressbar" style="width:0" data-width="70"></div></div>
+        </div>
+      </div>
+
+      <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="900" data-aos-delay="200">
+        <h3>Tech stack</h3>
+        <div class="row">
+          <div class="col-md-6">
+            <ul class="list-unstyled">
+              <li><i class="fa fa-check text-primary me-2"></i>HTML5 & CSS3</li>
+              <li><i class="fa fa-check text-primary me-2"></i>JavaScript (ES6+)</li>
+              <li><i class="fa fa-check text-primary me-2"></i>Bootstrap 5</li>
+              <li><i class="fa fa-check text-primary me-2"></i>Responsive Design</li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <ul class="list-unstyled">
+              <li><i class="fa fa-check text-primary me-2"></i>Node.js & Express</li>
+              <li><i class="fa fa-check text-primary me-2"></i>SQL / NoSQL</li>
+              <li><i class="fa fa-check text-primary me-2"></i>Basic Pentesting Tools</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h3 class="mb-0">Projects</h3>
+        <p class="muted mb-0">Filterable projects showcase — hover for details.</p>
+      </div>
+      <div class="btn-group" role="group" aria-label="filters">
+        <button class="btn btn-outline-primary active filter-btn" data-filter="all">All</button>
+        <button class="btn btn-outline-primary filter-btn" data-filter="frontend">Front-End</button>
+        <button class="btn btn-outline-primary filter-btn" data-filter="backend">Back-End</button>
+        <button class="btn btn-outline-primary filter-btn" data-filter="security">Security</button>
+      </div>
+    </div>
+
+    <div class="row g-4" id="projects-grid">
+      <!-- Project example 1 -->
+      <div class="col-md-6 col-lg-4 project-item" data-category="frontend" data-aos="flip-up" data-aos-duration="900">
+        <div class="project-card card border-0">
+          <div class="position-relative">
+            <img src="https://via.placeholder.com/800x450" class="img-fluid" alt="project">
+            <div class="project-badge">Front-End</div>
+          </div>
+          <div class="p-3">
+            <h5>Portfolio UI (sample)</h5>
+            <p class="muted small">Responsive portfolio using Bootstrap and custom animations.</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+              <div class="muted small"><i class="fa fa-code me-1"></i>HTML • JS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project example 2 -->
+      <div class="col-md-6 col-lg-4 project-item" data-category="backend" data-aos="flip-up" data-aos-duration="900" data-aos-delay="120">
+        <div class="project-card card border-0">
+          <div class="position-relative">
+            <img src="https://via.placeholder.com/800x450" class="img-fluid" alt="project">
+            <div class="project-badge">Back-End</div>
+          </div>
+          <div class="p-3">
+            <h5>API Service (sample)</h5>
+            <p class="muted small">REST API built with Node.js and Express. JWT auth and DB integration.</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <a href="#" class="btn btn-sm btn-outline-primary">Repo</a>
+              <div class="muted small"><i class="fa fa-server me-1"></i>Node • Express</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project example 3 -->
+      <div class="col-md-6 col-lg-4 project-item" data-category="security" data-aos="flip-up" data-aos-duration="900" data-aos-delay="240">
+        <div class="project-card card border-0">
+          <div class="position-relative">
+            <img src="https://via.placeholder.com/800x450" class="img-fluid" alt="project">
+            <div class="project-badge">Security</div>
+          </div>
+          <div class="p-3">
+            <h5>Web App Audit (sample)</h5>
+            <p class="muted small">Vulnerability assessment & remediation recommendations.</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <a href="#" class="btn btn-sm btn-outline-primary">Details</a>
+              <div class="muted small"><i class="fa fa-shield-halved me-1"></i>Burp Suite</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add more project items as needed -->
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="bg-dark" style="background:transparent;">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-6" data-aos="fade-right" data-aos-duration="900">
+        <div class="card contact-card">
+          <h4>Contact Me</h4>
+          <p class="muted">Want to work together? Send a message — use the form and I'll get back to you.</p>
+
+          <form id="contact-form">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Message</label>
+              <textarea class="form-control" id="message" rows="5" required></textarea>
+            </div>
+            <div>
+              <button class="btn btn-primary" id="send-btn" type="submit"><i class="fa fa-paper-plane me-2"></i>Send</button>
+              <span id="form-status" class="ms-3 muted"></span>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-6" data-aos="fade-left" data-aos-duration="900" data-aos-delay="200">
+        <div class="glass h-100 d-flex flex-column justify-content-center">
+          <h5 class="mb-3">Other ways to reach me</h5>
+          <p class="muted mb-1"><i class="fa fa-envelope me-2"></i> your.email@example.com</p>
+          <p class="muted mb-1"><i class="fa fa-phone me-2"></i> +234 000 000 0000</p>
+          <p class="muted mb-1"><i class="fa fa-map-marker-alt me-2"></i> Nigeria</p>
+
+          <div class="mt-4">
+            <a class="btn btn-outline-primary me-2" href="#" id="resume-link" target="_blank"><i class="fa fa-download me-2"></i>Download CV</a>
+            <a class="btn btn-outline-secondary" href="#" id="certs-link" target="_blank"><i class="fa fa-certificate me-2"></i>Certs</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="text-center">
+  <div class="container">
+    <small>© <span id="year"></span> Abdurrazak Khalifa — Built with HTML, Bootstrap & JavaScript</small>
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Lottie -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+
+<!-- AOS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+<!-- EmailJS (for contact form sending) -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
+
+<script>
+/* ========== Initialization ========== */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* Replace social links with your real profiles */
+document.getElementById('github-link').href = "https://github.com/your-username";
+document.getElementById('linkedin-link').href = "https://www.linkedin.com/in/your-username";
+document.getElementById('twitter-link').href = "https://x.com/your-username";
+
+/* ========== Typing animation ========== */
+const typingEl = document.getElementById('typing');
+const phrases = ["Front-End Developer", "Backend Developer", "Cybersecurity Analyst"];
+let ti = 0, pj = 0, direction = 1;
+function typeLoop() {
+  const current = phrases[ti];
+  if (direction === 1) {
+    typingEl.textContent = current.slice(0, ++pj);
+    if (pj === current.length) { direction = -1; setTimeout(typeLoop, 800); return; }
+  } else {
+    typingEl.textContent = current.slice(0, --pj);
+    if (pj === 0) { direction = 1; ti = (ti+1)%phrases.length; }
+  }
+  setTimeout(typeLoop, direction === 1 ? 70 : 30);
+}
+typeLoop();
+
+/* ========== Lottie globe background ========== */
+/*
+  I selected an example Lottie JSON for a globe-style animation.
+  If you prefer a different animation, replace 'lottieJsonUrl' with your chosen file URL.
+  Example Lottie JSON (you can swap): 
+  https://assets10.lottiefiles.com/packages/lf20_jcikwtux.json
+*/
+const lottieContainer = document.getElementById('lottie-bg');
+const lottieJsonUrl = "https://assets10.lottiefiles.com/packages/lf20_jcikwtux.json"; // example, swap if desired
+
+// create a wrapper div so Lottie scales nicely
+const wrapper = document.createElement('div');
+wrapper.style.width = "120%";
+wrapper.style.maxWidth = "1400px";
+wrapper.style.opacity = "0.95";
+lottieContainer.appendChild(wrapper);
+
+let lottieAnim;
+fetch(lottieJsonUrl).then(r => r.json()).then(data => {
+  lottieAnim = lottie.loadAnimation({
+    container: wrapper,
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    animationData: data,
+    rendererSettings: { preserveAspectRatio: 'xMidYMid slice' }
+  });
+}).catch(err=>{
+  console.warn('Could not load Lottie JSON. Replace lottieJsonUrl with a valid URL.', err);
+});
+
+/* ========== AOS init (flashy/dynamic animations) ========== */
+AOS.init({
+  duration: 900,
+  easing: 'ease-in-out-back',
+  once: false,
+  mirror: false,
+  offset: 120
+});
+
+/* ========== Skills progress animation (trigger on scroll) ========== */
+const bars = document.querySelectorAll('.progress-bar');
+const skillsObserver = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const innerBars = entry.target.querySelectorAll('.progress-bar');
+      innerBars.forEach(bar=>{
+        const w = bar.dataset.width || 0;
+        bar.style.width = w + '%';
+      });
+      skillsObserver.unobserve(entry.target);
+    }
+  });
+},{threshold:0.25});
+
+const skillsSection = document.getElementById('skills');
+if(skillsSection) skillsObserver.observe(skillsSection);
+
+/* ========== Project filtering ========== */
+const filterBtns = document.querySelectorAll('.filter-btn');
+const projectItems = document.querySelectorAll('.project-item');
+
+filterBtns.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    filterBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    projectItems.forEach(item=>{
+      const cat = item.dataset.category;
+      if(filter === 'all' || cat === filter) {
+        item.style.display = '';
+        item.classList.add('aos-animate');
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+});
+
+/* ========== Contact form (EmailJS) ==========
+   1) Create EmailJS account: https://www.emailjs.com/
+   2) Create SERVICE_ID and TEMPLATE_ID, then replace below values
+   3) Replace 'YOUR_USER_ID' in emailjs.init(...) call
+=============================================*/
+(function(){
+  if(window.emailjs) {
+    emailjs.init('YOUR_USER_ID'); // <-- replace with your EmailJS user id
+  }
+})();
+
+const form = document.getElementById('contact-form');
+const statusEl = document.getElementById('form-status');
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const message = document.getElementById('message').value.trim();
+  if(!name || !email || !message) return;
+
+  const btn = document.getElementById('send-btn');
+  btn.disabled = true;
+  statusEl.textContent = "Sending...";
+
+  const SERVICE_ID = 'YOUR_SERVICE_ID';   // <-- replace
+  const TEMPLATE_ID = 'YOUR_TEMPLATE_ID'; // <-- replace
+
+  if(window.emailjs && SERVICE_ID !== 'YOUR_SERVICE_ID'){
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+      from_name: name,
+      from_email: email,
+      message: message
+    }).then(function(){
+      statusEl.textContent = "Message sent — thanks!";
+      btn.disabled = false;
+      form.reset();
+    }, function(err){
+      console.error(err);
+      statusEl.textContent = "Oops — could not send. Check console.";
+      btn.disabled = false;
+    });
+  } else {
+    console.warn('EmailJS not configured. Replace SERVICE_ID, TEMPLATE_ID and USER_ID in the code.');
+    statusEl.textContent = "Email not configured. See console for setup instructions.";
+    btn.disabled = false;
+  }
+});
+
+/* ========== Smooth scroll for anchor links ========== */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click', e=>{
+    const href = a.getAttribute('href');
+    if(href.length>1){
+      e.preventDefault();
+      const el = document.querySelector(href);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  });
+});
+</script>
+</body>
+</html>

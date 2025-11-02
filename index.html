@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Abdurrazak Khalifa — Portfolio</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+    *{
+        color: black;
+    }
+    :root{
+      --blue:#0b69ff;
+      --blue-2:#0f4ef0;
+      --muted:#6b7280;
+      /* Define two color sets for the transition */
+      --storm-bg-start: #1e2a38;
+      --storm-bg-end: #0d121c;
+      --sun-bg-start: #78a9f0; /* Lighter blue for clear sky */
+      --sun-bg-end: #ffffff;
+      --text-color: #e0e7ee;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      /* Initial state: Storm */
+      background: linear-gradient(180deg, var(--storm-bg-start) 0%, var(--storm-bg-end) 100%);
+      color:var(--text-color);
+      transition: background 60s ease-in-out; /* Smooth 1-minute transition */
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      scroll-behavior:smooth;
+    }
+    /* Sunshine class to be added by JS */
+    body.sunshine{
+        background: linear-gradient(180deg, var(--sun-bg-start) 0%, var(--sun-bg-end) 100%);
+        color: #0b273b; /* Dark text for light background */
+    }
+
+    /* Navbar */
+    .navbar{
+      background: rgba(13, 18, 28, 0.85);
+      backdrop-filter: blur(6px);
+      transition: background 60s ease-in-out;
+    }
+    .navbar.sunshine {
+        background: rgba(255, 255, 255, 0.85);
+    }
+    .nav-link { color: rgba(255,255,255,0.9) !important; font-weight:600; transition: color 60s ease-in-out; }
+    .navbar.sunshine .nav-link { color: rgba(11,39,59,0.85) !important; }
+    .navbar-brand { transition: color 60s ease-in-out; }
+    .navbar.sunshine .navbar-brand { color: var(--blue) !important; }
+.text-mu{
+    font-size: 5vh;
+}
+.fa-bars{
+    color: #0f4ef0;
+    font-size: 35px;
+}
+    /* Hero */
+    #hero{
+      position:relative;
+      min-height:92vh;
+      display:flex;
+      align-items:center;
+      padding-top:4rem;
+      padding-bottom:4rem;
+      overflow:hidden;
+    }
+    /* This canvas will now draw realistic lightning lines */
+    #particle-canvas{
+      position:absolute;
+      inset:0;
+      z-index:0;
+    }
+    .hero-content{
+      position:relative;
+      z-index:2;
+    }
+    .name {
+      font-size: clamp(2rem, 4.8vw, 3.6rem);
+      font-weight:800;
+      letter-spacing:-0.02em;
+      color:var(--blue);
+    }
+    .title {
+      font-size: clamp(1rem, 2.4vw, 1.25rem);
+      color: var(--text-color);
+      margin-bottom:0.5rem;
+      transition: color 60s ease-in-out;
+    }
+    body.sunshine .title { color: #0b273b; }
+
+    .typing {
+      color: var(--text-color);
+      font-weight:700;
+      transition: color 60s ease-in-out;
+    }
+    body.sunshine .typing { color: #0b273b; }
+
+
+    /* --- THUNDERSTORM CSS --- */
+    .rain {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+      opacity: 1;
+      transition: opacity 20s ease-in; /* Fade out rain when sun shines */
+    }
+    .rain-drop {
+      position: absolute;
+      width: 3px; 
+      height: 50px; 
+      background: rgba(180, 200, 255, 0.8);
+      transform: translateY(-100%) rotate(15deg); 
+      animation: fall linear infinite;
+      box-shadow: 0 0 5px rgba(180, 200, 255, 0.5); 
+    }
+    .rain.fading {
+        opacity: 0; /* Class to hide rain for sunshine */
+    }
+
+    @keyframes fall {
+      to { transform: translateY(100vh) rotate(15deg); } 
+    }
+
+    /* --- SUNSHINE CSS --- */
+    .sun{
+        position: absolute;
+        top: 10%;
+        right: 15%;
+        width: 150px;
+        height: 150px;
+        background: #ffcc00;
+        border-radius: 50%;
+        box-shadow: 0 0 60px #ffcc00, 0 0 100px #ffcc00;
+        opacity: 0;
+        z-index: 1;
+        transition: opacity 60s ease-in-out;
+    }
+    .sun.shining{
+        opacity: 1;
+    }
+
+    /* Card sections */
+    section { padding: 5rem 0; }
+    /* Update card styles for dark background */
+    .card-ghost {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transition: background 60s ease-in-out, color 60s ease-in-out;
+    }
+    body.sunshine .card-ghost {
+        background: rgba(255, 255, 255, 0.85);
+        color: #0b273b;
+        box-shadow: 0 10px 30px rgba(9,30,66,0.08);
+    }
+
+    /* Skills */
+    .skill { margin-bottom:1rem; }
+    .skill .label { font-weight:700; }
+    .progress { height:12px; border-radius:12px; background: rgba(255,255,255,0.1); transition: background 60s ease-in-out; }
+    body.sunshine .progress { background: rgba(0,0,0,0.06); }
+
+    /* Projects */
+    .project-card { border-radius:12px; overflow:hidden; transition: transform .25s ease, box-shadow .25s ease, background-color 60s ease-in-out; background-color: rgba(255,255,255,0.05); } 
+    .project-card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,0.4); }
+    body.sunshine .project-card { background-color: var(--card); box-shadow: 0 10px 30px rgba(9,30,66,0.08); }
+    .project-card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(11,38,75,0.12); }
+
+
+    .project-badge { position:absolute; top:12px; right:12px; background: rgba(255,255,255,0.15); color:#fff; padding:6px 10px; border-radius:999px; font-weight:700; }
+
+    /* Contact */
+    .contact-card { padding: 1.75rem; }
+
+    /* Footer */
+    footer { padding:2.5rem 0; color:var(--muted); }
+
+    /* Small helpers */
+    .muted { color:var(--muted); }
+    /* Update glass style for dark background */
+    .glass {
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 6px 22px rgba(0,0,0,0.3);
+      color: var(--text-color);
+      transition: background 60s ease-in-out, color 60s ease-in-out;
+    }
+    body.sunshine .glass {
+        background: rgba(255,255,255,0.7);
+        color: #0b273b;
+        box-shadow: 0 6px 22px rgba(11,38,75,0.06);
+    }
+
+
+    /* Responsive tweaks */
+    @media (max-width: 768px) {
+      #hero { 
+        min-height:78vh; 
+        padding-top:2rem; 
+        padding-bottom:2rem;
+        text-align: center; /* Center content on mobile for better balance */
+      }
+      .hero-content .row { flex-direction: column-reverse; } /* Stack profile above text on mobile if shown */
+      .sun { 
+        width: 100px; 
+        height: 100px; 
+        top: 5%; 
+        right: 5%; 
+        transform: scale(0.8); /* Scale down sun on mobile to avoid overlap */
+      }
+      .project-badge { 
+        position: static; /* Make badge inline on mobile to avoid clipping */
+        display: inline-block;
+        margin-bottom: 0.5rem;
+      }
+      .navbar-brand { font-size: 1.1rem; } /* Smaller brand on mobile */
+      section { padding: 3rem 0; } /* Reduce section padding on mobile */
+      .btn { white-space: nowrap; } /* Prevent button text wrap */
+    }
+
+    @media (max-width: 576px) {
+      #hero { min-height: 70vh; } /* Further reduce hero height on very small screens */
+      .name { font-size: 2rem; } /* Cap name size */
+      .title { font-size: 1rem; }
+      .glass, .card-ghost, .contact-card { padding: 1rem; } /* Reduce padding in cards */
+      .d-flex.gap-2 { flex-direction: column; } /* Stack buttons vertically on extra small */
+      .d-flex.justify-content-between { flex-direction: column; align-items: flex-start; gap: 0.5rem; } /* Stack project footer elements */
+    }
+
+    /* Simple fade-in animation (used by JS IntersectionObserver) */
+    .reveal {
+      opacity:0;
+      transform: translateY(18px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.show {
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    /* Added styles for dark mode compatibility in specific elements */
+    #about .card-ghost, #contact .card-ghost { border: none; }
+    #skills, #contact { 
+        background: #15202b !important;
+        transition: background 60s ease-in-out;
+    }
+    body.sunshine #skills, body.sunshine #contact {
+        background: var(--bg) !important;
+    }
+    .form-control { 
+        background-color: rgba(255,255,255,0.1) !important; 
+        color: #fff !important; 
+        border-color: rgba(255,255,255,0.2) !important; 
+        transition: background-color 60s ease-in-out, border-color 60s ease-in-out, color 60s ease-in-out;
+    }
+    body.sunshine .form-control { 
+        background-color: #fff !important; 
+        color: #0b273b !important; 
+        border-color: rgba(0,0,0,0.1) !important; 
+    }
+    .form-control:focus { background-color: rgba(255,255,255,0.2) !important; color: #fff !important; border-color: var(--blue) !important; box-shadow: 0 0 0 0.25rem rgba(11, 105, 255, 0.25) !important; }
+    .form-label { color: var(--text-color); transition: color 60s ease-in-out; }
+    body.sunshine .form-label { color: #0b273b; }
+
+    /* Ensure images and embeds are fully responsive */
+    img { max-width: 100%; height: auto; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold text-primary" href="#hero">Abdurrazak Khalifa</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"><i class="fa fa-bars"></i></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto gap-2">
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+        <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header id="hero" class="d-flex align-items-center">
+<div class="rain" id="rain-container"></div> 
+  <div class="sun" id="sun-element"></div>
+    <canvas id="particle-canvas"></canvas>
+
+  <div class="container hero-content">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <div class="reveal" id="hero-left">
+          <p class="muted mb-2">Hello, I'm</p>
+          <h1 class="name mb-2">Abdurrazak Khalifa</h1>
+          <div class="title mb-3">Front-End Developer • Backend Developer • Cybersecurity Analyst</div>
+
+          <div class="mb-4">
+            <span class="typing" id="typing"></span>
+            <span class="muted"> — building fast, secure, and delightful user experiences.</span>
+          </div>
+
+          <div class="d-flex gap-2">
+            <a class="btn btn-primary btn-lg" href="#projects"><i class="fa fa-briefcase me-2"></i>See Projects</a>
+            <a class="btn btn-outline-primary btn-lg" href="#contact"><i class="fa fa-envelope me-2"></i>Contact Me</a>
+          </div>
+
+          <div class="mt-4">
+            <a class="text-mu mb-4" href="https://github.com/Khalifaabdurrazak" id="github-link"><i class="fab fa-github"></i></a>
+            <a class="text-mu mb-4" href="www.linkedin.com/in/abdurrazak-sikirullahi-839096357" id="linkedin-link"><i class="fab fa-linkedin "></i></a>
+            <a class="text-mu mb-4" href="" id="twitter-link"><i class="fab fa-facebook"></i></a>
+            <a class="text-mu mb-4" href="#" id="twitter-link"><i class="fab fa-whatsapp "></i></a>
+            <a class="text-mu mb-4" href="#" id="twitter-link"><i class="fa-solid fa-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5 d-none d-md-block"> <!-- Changed to d-md-block to show on tablets too -->
+        <div class="card card-ghost p-4">
+          <!-- Example profile block -->
+          <div class="d-flex align-items-center gap-3">
+            <img src="image/Gemini_Generated_Image_usx619usx619usx6.png" alt="profile" class="rounded-circle" width="110" height="110">
+            <div>
+              <h5 class="mb-0">Abdurrazak Khalifa</h5>
+              <div class="muted">Front-End · Backend · Cybersecurity</div>
+              <div class="mt-2">
+                <small class="muted">Based in Nigeria</small>
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-3">
+
+          <div class="muted small">
+            <strong>Stack:</strong> HTML, CSS, JavaScript, Bootstrap, PHP, Laravel, Github, Python, Django, MySql, Node.js, Docker, Burp Suite, Bash e.t.c
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-6 reveal">
+        <div class="card card-ghost p-4">
+          <h3>About me</h3>
+          <p class="muted">I’m a front-end and backend developer with an interest in cybersecurity. I build fast, accessible user interfaces and secure backend services. I enjoy learning new frameworks and making projects that solve real problems.</p>
+          <ul class="list-unstyled">
+            <li><strong>Experience:</strong> Web apps, APIs, pentesting basics, Network scanning</li>
+            <li><strong>Tools:</strong> VSCode, Github, Docker, Linux</li>
+            <li><strong>Languages:</strong>JavaScript (ES6+), Python, PHP</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-lg-6 reveal">
+        <div class="glass">
+          <h5 class="mb-3">Quick Stats</h5>
+          <div class="d-flex justify-content-between">
+            <div>
+              <h4 class="mb-0">8+</h4>
+              <small class="muted">Projects</small>
+            </div>
+            <div>
+              <h4 class="mb-0">3</h4>
+              <small class="muted">Skills Focus</small>
+            </div>
+            <div>
+              <h4 class="mb-0">2</h4>
+              <small class="muted">Certifications</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="bg-light">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-5 reveal">
+        <h3>Skills</h3>
+        <p class="muted">Front-End, Back-End and Cybersecurity skills with animated progress bars.</p>
+
+        <div class="skill">
+          <div class="d-flex justify-content-between mb-1">
+            <div class="label">Front-End (HTML/CSS/JS/Bootstrap)</div><div class="muted">90%</div>
+          </div>
+          <div class="progress"><div class="progress-bar" role="progressbar" style="width:0" data-width="90"></div></div>
+        </div>
+
+        <div class="skill">
+          <div class="d-flex justify-content-between mb-1">
+            <div class="label">Back-End (PHP, Laravel, Python, MySql, Node, Express, DB)</div><div class="muted">80%</div>
+          </div>
+          <div class="progress"><div class="progress-bar" role="progressbar" style="width:0" data-width="80"></div></div>
+        </div>
+
+        <div class="skill">
+          <div class="d-flex justify-content-between mb-1">
+            <div class="label">Cybersecurity (Networking, Pentesting basics)</div><div class="muted">80%</div>
+          </div>
+          <div class="progress"><div class="progress-bar" role="progressbar" style="width:0" data-width="80"></div></div>
+        </div>
+      </div>
+      &nbsp;&nbsp;&nbsp;
+      <div class="col-lg-6 reveal">
+        <h3>Tech stack</h3>
+        <div class="row">
+          <div class="col-md-4">
+            <ul class="list-unstyled">
+              <li><i class="fa fa-check text-primary me-2"></i>HTML5 & CSS3</li>
+              <li><i class="fa fa-check text-primary me-2"></i>JavaScript (ES6+)</li>
+              <li><i class="fa fa-check text-primary me-2"></i>Bootstrap 5</li>
+              <li><i class="fa fa-check text-primary me-2"></i>React</li>
+              <li><i class="fa fa-check text-primary me-2"></i>Responsive Design</li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <ul class="list-unstyled">
+              <li><i class="fa fa-check text-primary me-2"></i>Python</li>
+              <li><i class="fa fa-check text-primary me-2"></i>PHP</li>
+              <li><i class="fa fa-check text-primary me-2"></i>Laravel</li>
+              <li><i class="fa fa-check text-primary me-2"></i>Django</li>
+              <li><i class="fa fa-check text-primary me-2"></i>Node.js & Express</li>
+              <li><i class="fa fa-check text-primary me-2"></i>SQL / NoSQL</li>
+            </ul>
+          </div>
+           <div class="col-md-4">
+            <ul class="list-unstyled">
+              <li><i class="fa fa-check text-primary me-2"></i>Basic Pentesting Tools</li>
+              <li><i class="fa fa-check text-primary me-2"></i>Network scanning</li>
+              <li><i class="fa fa-check text-primary me-2"></i>Linux</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap"> <!-- Added flex-wrap for mobile stacking -->
+      <div>
+        <h3 class="mb-0">Projects</h3>
+        <p class="muted mb-0">Filterable projects showcase — hover for details.</p>
+      </div>
+      <div class="btn-group mt-2 mt-md-0" role="group" aria-label="filters"> <!-- Added mt-2 for mobile stacking -->
+        <button class="btn btn-outline-primary active filter-btn" data-filter="all">All</button>
+        <button class="btn btn-outline-primary filter-btn" data-filter="frontend">Front-End</button>
+        <button class="btn btn-outline-primary filter-btn" data-filter="backend">Back-End</button>
+        <button class="btn btn-outline-primary filter-btn" data-filter="security">Security</button>
+      </div>
+    </div>
+
+    <div class="row g-4" id="projects-grid">
+      <!-- Project example 1 -->
+      <div class="col-md-6 col-lg-4 project-item reveal" data-category="frontend">
+        <div class="project-card card border-0">
+          <div class="position-relative">
+            <img src="https://via.placeholder.com/800x450" class="img-fluid" alt="project">
+            <div class="project-badge">Front-End</div>
+          </div>
+          <div class="p-3">
+            <h5>Front-End Projects</h5>
+            <p class="muted small">Responsive Websites using HTML, CSS, Bootstrap, React, and custom animations. e.t.c</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+              <div class="muted small"><i class="fa fa-code me-1"></i>HTML • JS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project example 2 -->
+      <div class="col-md-6 col-lg-4 project-item reveal" data-category="backend">
+        <div class="project-card card border-0">
+          <div class="position-relative">
+            <img src="https://via.placeholder.com/800x450" class="img-fluid" alt="project">
+            <div class="project-badge">Back-End</div>
+          </div>
+          <div class="p-3">
+            <h5>API Service (sample)</h5>
+            <p class="muted small">REST API built with PHP, Laravel, Python, Django, SQL, Node.js and Express. JWT auth and DB integration.</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <a href="#" class="btn btn-sm btn-outline-primary">Repo</a>
+              <div class="muted small"><i class="fa fa-server me-1"></i>Node • Express</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project example 3 -->
+      <div class="col-md-6 col-lg-4 project-item reveal" data-category="security">
+        <div class="project-card card border-0">
+          <div class="position-relative">
+            <img src="https://via.placeholder.com/800x450" class="img-fluid" alt="project">
+            <div class="project-badge">Security</div>
+          </div>
+          <div class="p-3">
+            <h5>Web App Audit (sample)</h5>
+            <p class="muted small">Vulnerability assessment & remediation recommendations.</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <a href="#" class="btn btn-sm btn-outline-primary">Details</a>
+              <div class="muted small"><i class="fa fa-shield-halved me-1"></i>Burp Suite</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add more project items as needed - replicate structure and change data-category -->
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="bg-light">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-6 reveal">
+        <div class="card contact-card">
+          <h4>Contact Me</h4>
+          <p class="muted">Want to work together? Send a message — use the form and I'll get back to you.</p>
+
+          <form id="contact-form">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Message</label>
+              <textarea class="form-control" id="message" rows="5" required></textarea>
+            </div>
+            <div>
+              <button class="btn btn-primary" id="send-btn" type="submit"><i class="fa fa-paper-plane me-2"></i>Send</button>
+              <span id="form-status" class="ms-3 muted"></span>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-6 reveal">
+        <div class="glass h-100 d-flex flex-column justify-content-center">
+          <h5 class="mb-3">Other ways to reach me</h5>
+          <p class="muted mb-1"><i class="fa fa-envelope me-2"></i> your.email@example.com</p>
+          <p class="muted mb-1"><i class="fa fa-phone me-2"></i> +234 000 000 0000</p>
+          <p class="muted mb-1"><i class="fa fa-map-marker-alt me-2"></i> Nigeria</p>
+
+          <div class="mt-4">
+            <a class="btn btn-outline-primary me-2" href="#" id="resume-link" target="_blank"><i class="fa fa-download me-2"></i>Download CV</a>
+            <a class="btn btn-outline-secondary" href="#" id="certs-link" target="_blank"><i class="fa fa-certificate me-2"></i>Certs</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="text-center">
+  <div class="container">
+    <small>© <span id="year"></span> Abdurrazak Khalifa — Built with HTML, Bootstrap & JavaScript</small>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
+
+<script>
+/* =========================
+   Small helpers & init
+   ========================= */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* Replace social links with your real profiles */
+document.getElementById('github-link').href = "https://github.com/your-username";
+document.getElementById('linkedin-link').href = "https://www.linkedin.com/in/your-username";
+document.getElementById('twitter-link').href = "https://x.com/your-username";
+document.getElementById('resume-link').href = "#"; 
+document.getElementById('certs-link').href = "#"; 
+
+/* =========================
+   Typing animation (simple)
+   ========================= */
+const typingEl = document.getElementById('typing');
+const phrases = ["Front-End Developer", "Backend Developer", "Cybersecurity Analyst"];
+let ti = 0, pj = 0, direction = 1;
+
+function typeLoop() {
+  const current = phrases[ti];
+  if (direction === 1) {
+    typingEl.textContent = current.slice(0, ++pj);
+    if (pj === current.length) { direction = -1; setTimeout(typeLoop, 1000); return; }
+  } else {
+    typingEl.textContent = current.slice(0, --pj);
+    if (pj === 0) { direction = 1; ti = (ti+1)%phrases.length; }
+  }
+  setTimeout(typeLoop, direction === 1 ? 80 : 30);
+}
+typeLoop();
+
+/* =======================================
+   DYNAMIC WEATHER CYCLE LOGIC (20s Repeat: Storm <-> Sunshine)
+   ======================================= */
+const body = document.body;
+const rainContainer = document.getElementById('rain-container');
+const sunElement = document.getElementById('sun-element');
+const navbar = document.querySelector('.navbar');
+
+const NUM_DROPS = 70; 
+// Total cycle is 60000ms (60 seconds)
+const TRANSITION_TIME = 3000; // 3 seconds for the gradual fade
+const ACTIVE_STATE_DURATION = 30000 - TRANSITION_TIME; // 27 seconds of active weather
+const CYCLE_DURATION = 60000; // Total cycle length
+
+let isStorm = true; // Start in Storm mode
+
+// 1. Raindrop Generation
+function createRain() {
+    if (rainContainer.children.length === 0) {
+        for (let i = 0; i < NUM_DROPS; i++) {
+            const drop = document.createElement('div');
+            drop.classList.add('rain-drop');
+            drop.style.left = `${Math.random() * 100}%`;
+            drop.style.animationDuration = `${0.3 + Math.random() * 0.4}s`; 
+            drop.style.animationDelay = `${-Math.random() * 12}s`;
+            drop.style.opacity = `${0.4 + Math.random() * 0.6}`;
+            rainContainer.appendChild(drop);
+        }
+    }
+}
+createRain(); // Initial call to create rain
+
+// --- Main Cycle Function ---
+function startWeatherCycle() {
+    // Clear canvas regardless, for a clean transition
+    ctx.clearRect(0, 0, w, h);
+
+    if (isStorm) {
+        // --- TRANSITION: STORM to SUNSHINE ---
+        
+        // 1. Start fading out rain/lightning IMMEDIATELY by adding the 'fading' class.
+        rainContainer.classList.add('fading');
+
+        // 2. Wait for the TRANSITION_TIME (3 seconds) before applying the full sunshine theme.
+        setTimeout(() => {
+            body.classList.add('sunshine');
+            navbar.classList.add('sunshine');
+            sunElement.classList.add('shining');
+            
+            // Critical: Ensure the theme change looks smooth by matching the CSS transition time.
+        }, TRANSITION_TIME); 
+
+    } else {
+        // --- TRANSITION: SUNSHINE to STORM ---
+        
+        // 1. Remove sunshine classes IMMEDIATELY. This starts the CSS transition back to the dark theme.
+        body.classList.remove('sunshine');
+        navbar.classList.remove('sunshine');
+        sunElement.classList.remove('shining');
+        
+        // 2. Start fading in rain after the full transition time.
+        // The dark theme is now active, so the rain can fade back in (remove 'fading' class).
+        setTimeout(() => {
+             rainContainer.classList.remove('fading');
+        }, TRANSITION_TIME);
+    }
+
+    // Toggle the state for the next cycle
+    isStorm = !isStorm;
+}
+
+// 2. Timed Transition
+// Call the function initially to start the first transition (Storm -> Sunshine)
+setTimeout(startWeatherCycle, ACTIVE_STATE_DURATION); 
+
+// Then, set an interval to repeat the full cycle (60 seconds)
+setInterval(startWeatherCycle, CYCLE_DURATION);
+
+
+/* ======================================
+   Lightning Strike (Canvas) - REALISTIC LINES
+   ====================================== */
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+
+let w = canvas.width = innerWidth;
+let h = canvas.height = innerHeight;
+
+function resize(){
+    w = canvas.width = innerWidth;
+    h = canvas.height = innerHeight;
+    // Re-generate rain and clear canvas on resize
+    rainContainer.innerHTML = '';
+    createRain();
+}
+addEventListener('resize', resize);
+
+// Lightning variables
+let flashTime = 0;
+const MIN_INTERVAL = 3000; 
+const MAX_INTERVAL = 10000;
+let nextFlashTime = Date.now() + MIN_INTERVAL + Math.random() * (MAX_INTERVAL - MIN_INTERVAL);
+
+// Simple utility function
+function rand(min, max){ return Math.random() * (max - min) + min; }
+
+// Recursive function to create a branching line (fractal-like)
+function generateLightning(x, y, angle, length, branchChance) {
+    if (length < 3 || Math.random() > 0.95) return;
+
+    ctx.lineTo(x, y);
+
+    const nx = x + Math.cos(angle) * length;
+    const ny = y + Math.sin(angle) * length;
+    
+    ctx.lineTo(nx, ny);
+
+    if (Math.random() < branchChance) {
+        ctx.moveTo(nx, ny);
+        generateLightning(nx, ny, angle + rand(-0.4, 0.4), length * rand(0.6, 0.9), branchChance * 0.8);
+    }
+
+    generateLightning(nx, ny, angle + rand(-0.2, 0.2), length * rand(0.7, 0.9), branchChance);
+}
+
+
+function drawLightning() {
+    ctx.beginPath();
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.shadowColor = '#FFFFFF';
+    ctx.shadowBlur = flashTime / 4; 
+    
+    ctx.moveTo(w / 2, 0); 
+    generateLightning(w / 2, 0, Math.PI / 2, 40, 0.5); 
+
+    ctx.stroke();
+}
+
+
+let lightningRequestId;
+function lightningAnimate(){
+    ctx.clearRect(0, 0, w, h);
+
+    // Only draw lightning if we are in the storm state
+    if (isStorm) {
+        if (Date.now() > nextFlashTime) {
+            flashTime = 50; 
+            nextFlashTime = Date.now() + MIN_INTERVAL + Math.random() * (MAX_INTERVAL - MIN_INTERVAL);
+        }
+
+        if (flashTime > 0) {
+            drawLightning();
+            flashTime -= 5;
+        }
+    }
+
+    lightningRequestId = requestAnimationFrame(lightningAnimate);
+}
+
+lightningAnimate();
+
+/* =========================
+   Intersection Observer for reveal animations & progress bars
+   ========================= */
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('show');
+      // progress bars
+      const bars = entry.target.querySelectorAll('.progress-bar');
+      bars.forEach(bar=>{
+        const target = bar.dataset.width;
+        if(target){
+          bar.style.width = target + '%';
+          bar.classList.add('bg-primary');
+        }
+      });
+    }
+  });
+},{threshold:0.15});
+revealEls.forEach(el => observer.observe(el));
+
+/* =========================
+   Project filtering
+   ========================= */
+const filterBtns = document.querySelectorAll('.filter-btn');
+const projectItems = document.querySelectorAll('.project-item');
+
+filterBtns.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    filterBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    projectItems.forEach(item=>{
+      const cat = item.dataset.category;
+      if(filter === 'all' || cat === filter) {
+        item.style.display = '';
+        item.classList.add('show');
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+});
+
+/* =========================
+   Contact form (EmailJS)
+   ========================= */
+(function(){
+  if(window.emailjs) {
+    emailjs.init('YOUR_USER_ID'); // <-- replace this
+  }
+})();
+
+const form = document.getElementById('contact-form');
+const statusEl = document.getElementById('form-status');
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const message = document.getElementById('message').value.trim();
+  if(!name || !email || !message) return;
+
+  const btn = document.getElementById('send-btn');
+  btn.disabled = true;
+  statusEl.textContent = "Sending...";
+
+  const SERVICE_ID = 'YOUR_SERVICE_ID';   // <-- replace
+  const TEMPLATE_ID = 'YOUR_TEMPLATE_ID'; // <-- replace
+
+  if(window.emailjs && SERVICE_ID !== 'YOUR_SERVICE_ID'){
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+      from_name: name,
+      from_email: email,
+      message: message
+    }).then(function(){
+      statusEl.textContent = "Message sent — thanks!";
+      btn.disabled = false;
+      form.reset();
+    }, function(err){
+      console.error(err);
+      statusEl.textContent = "Oops — could not send. Check console.";
+      btn.disabled = false;
+    });
+  } else {
+    console.warn('EmailJS not configured. Replace SERVICE_ID, TEMPLATE_ID and USER_ID in the code.');
+    statusEl.textContent = "Email not configured. See console for setup instructions.";
+    btn.disabled = false;
+  }
+});
+
+/* =========================
+   Smooth scrolling
+   ========================= */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click', e=>{
+    const href = a.getAttribute('href');
+    if(href.length>1){
+      e.preventDefault();
+      const el = document.querySelector(href);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  });
+});
+</script> 
+</body>
+</html>
