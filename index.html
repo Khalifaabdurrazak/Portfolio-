@@ -276,12 +276,11 @@
     }
     .form-control { 
         background-color: rgba(255,255,255,0.1) !important; 
-        color: #fff !important; 
+        color: blue !important; 
         border-color: rgba(255,255,255,0.2) !important; 
         transition: background-color 60s ease-in-out, border-color 60s ease-in-out, color 60s ease-in-out;
     }
     body.sunshine .form-control { 
-        background-color: #fff !important; 
         color: #0b273b !important; 
         border-color: rgba(0,0,0,0.1) !important; 
     }
@@ -291,6 +290,367 @@
 
     /* Ensure images and embeds are fully responsive */
     img { max-width: 100%; height: auto; }
+    /* No changes to CSS - it applies to both overlays (add .overlay2 if needed for uniqueness) */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    color: #fff;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    overflow-y: auto;
+    padding: 1rem;
+    animation: fadeInOverlay 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+#particle-background,
+#particle-background2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0.1;
+}
+
+@keyframes fadeInOverlay {
+    from { opacity: 0; transform: scale(0.95) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.overlay-content {
+    width: 100%;
+    max-width: 1000px;
+    position: relative;
+    background: linear-gradient(145deg, #1a2332, #0f1620);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 20px rgba(11, 105, 255, 0.1);
+    overflow: hidden;
+    margin: 1rem auto;
+    z-index: 2;
+    backdrop-filter: blur(10px);
+    animation: slideUpContent 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
+}
+
+@keyframes slideUpContent {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    color: rgba(255, 255, 255, 0.7);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #0b69ff;
+    background: rgba(11, 105, 255, 0.2);
+    transform: rotate(90deg) scale(1.1);
+}
+
+.overlay-inner {
+    padding: 2rem;
+    position: relative;
+    z-index: 3;
+}
+
+.title-animation {
+    animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s both;
+}
+
+.carousel {
+    border-radius: 12px;
+    overflow: hidden !important;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.carousel-inner {
+    overflow: hidden !important;
+    border-radius: 12px;
+}
+
+.carousel-item {
+    padding: 1.5rem 0;
+    display: flex !important;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    transition: opacity 0.6s ease-in-out;
+}
+
+.carousel-item h2,
+.carousel-item h3 {
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.carousel-item h2 {
+    font-size: 2rem;
+}
+
+.carousel-item h3 {
+    font-size: 1.5rem;
+}
+
+.carousel-item .lead {
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1.5rem;
+}
+
+.carousel-item p,
+.carousel-item li {
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 1rem;
+}
+
+.carousel-item ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.carousel-item ul li {
+    padding: 0.5rem 0;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.carousel-item ul li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: #0b69ff;
+    font-weight: bold;
+}
+
+.slide-in-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    animation: slideInLeft 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.slide-in-right {
+    opacity: 0;
+    transform: translateX(50px);
+    animation: slideInRight 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+
+@keyframes slideInLeft {
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.project-img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0;
+    animation: fadeInImage 1s ease-out 0.5s forwards;
+}
+
+.project-img:hover {
+    transform: scale(1.02);
+}
+
+@keyframes fadeInImage {
+    to { opacity: 1; }
+}
+
+.icon-dis {
+    font-size: 1.5rem;
+    margin-right: 0.75rem;
+    background: rgba(11, 105, 255, 0.1);
+    padding: 0.5rem;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.icon-dis:hover {
+    transform: scale(1.1);
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+    filter: none;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    opacity: 1;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-size: 20px;
+    background-color: rgba(11, 105, 255, 0.2);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+.carousel-indicators [data-bs-target] {
+    background-color: rgba(11, 105, 255, 0.5);
+    border: none;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+}
+
+.carousel-indicators .active {
+    background-color: #0b69ff;
+    transform: scale(1.2);
+}
+
+@media (max-width: 1200px) {
+    .overlay-content {
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 992px) {
+    .overlay-inner {
+        padding: 1.5rem 1rem;
+    }
+
+    .carousel-item h2 {
+        font-size: 1.75rem;
+    }
+
+    .carousel-item h3 {
+        font-size: 1.25rem;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .overlay {
+        padding: 0.5rem;
+        align-items: flex-start;
+        padding-top: 1rem;
+    }
+
+    .overlay-content {
+        margin: 0;
+        border-radius: 12px;
+        max-height: 95vh;
+        overflow-y: auto;
+    }
+
+    .overlay-inner {
+        padding: 1.5rem 1rem;
+    }
+
+    .carousel-item {
+        text-align: center;
+    }
+
+    .carousel-item .row > * {
+        margin-bottom: 1.5rem;
+    }
+
+    .carousel-item .row > *:last-child {
+        margin-bottom: 0;
+    }
+
+    .carousel-indicators {
+        display: none;
+    }
+
+    .close-btn {
+        top: 0.75rem;
+        right: 0.75rem;
+        font-size: 1.25rem;
+        width: 36px;
+        height: 36px;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 10%;
+    }
+}
+
+@media (max-width: 480px) {
+    .overlay-inner {
+        padding: 1rem 0.75rem;
+    }
+
+    .carousel-item h2 {
+        font-size: 1.5rem;
+    }
+
+    .carousel-item .lead {
+        font-size: 1rem;
+    }
+
+    .icon-dis {
+        font-size: 1.25rem;
+        width: 2rem;
+        height: 2rem;
+        margin-right: 0.5rem;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 35px;
+        height: 35px;
+        background-size: 16px;
+    }
+}
 </style>
 </head>
 <body>
@@ -299,9 +659,13 @@
 <nav class="navbar navbar-expand-lg fixed-top">
   <div class="container">
     <a class="navbar-brand fw-bold text-primary" href="#hero">Abdurrazak Khalifa</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-      <span class="navbar-toggler-icon"><i class="fa fa-bars"></i></span>
-    </button>
+   <button class="navbar-toggler" type="button"  data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon">
+    <i class="fa fa-bars"></i>
+  </span>
+</button>
+    <!-- <i class="fa fa-bars"></i> -->
+
     <div class="collapse navbar-collapse" id="navMenu">
       <ul class="navbar-nav ms-auto gap-2">
         <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
@@ -347,6 +711,10 @@
         </div>
       </div>
 
+
+      <div class="invesible-control">
+  <img src="image/Gemini_Generated_Image_usx619usx619usx6.png" alt="" class="inve-img img-fluid mt-4 mb-4">
+</div>
       <div class="col-lg-5 d-none d-md-block"> 
         <div class="card card-ghost p-4">
           <div class="d-flex align-items-center gap-3">
@@ -370,7 +738,6 @@
     </div>
   </div>
 </header>
-
 <!-- ABOUT -->
 <section id="about">
   <div class="container">
@@ -509,83 +876,232 @@
           </div>
         </div>
       </div>
-      <!-- ///////////////////overcassing showcase///////////////////// -->
- <!-- Overlay -->
+   <!-- ///////////////////overcassing showcase///////////////////// -->
+<!-- Overlay -->
 <div id="projectOverlay" class="overlay">
-  <div class="overlay-content">
-    <div class="overlay-inner">
-      <span class="close-btn" onclick="closeOverlay()"> &times;</span>
-      <div class="overlay-section mt-5">
-        <img src="image/Gemini_Generated_Image_2f19n92f19n92f19.png" width="500" alt=""><br>
-        <h class="text-center">AL- KAHLIFA Restaurantly</h><br>
-        <p2>hellp how is this guy and  did u know that i love u so much</p2>
+    <canvas id="particle-background"></canvas>
+    <span class="close-btn" onclick="closeOverlay()">&times;</span> <!-- Moved to overlay level for fixed positioning -->
+    
+    <div class="overlay-content mt-5 ">
+      <div class="rain" id="rain-container"></div> 
+  <div class="sun" id="sun-element"></div>
+    <canvas id="particle-canvas"></canvas>
+        <div class="overlay-inner mt-5">
+            <h2 class="text-center mb-4 title-animation" style="margin-top: 130%; color: white;">AL-KAHLIFA Restaurant Project</h2>
+            <div id="projectCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-wrap="true">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#projectCarousel" data-bs-slide-to="0" class="active"></button>
+                    <button type="button" data-bs-target="#projectCarousel" data-bs-slide-to="1"></button>
+                    <button type="button" data-bs-target="#projectCarousel" data-bs-slide-to="2"></button>
+                    <button type="button" data-bs-target="#projectCarousel" data-bs-slide-to="3"></button>
+                    <button type="button" data-bs-target="#projectCarousel" data-bs-slide-to="4"></button>
+                    <button type="button" data-bs-target="#projectCarousel" data-bs-slide-to="5"></button>
+                </div>
+                <div class="carousel-inner">
+                    <!-- Slide 1: Project Overview -->
+                    <div class="carousel-item active">
+                        <div class="row align-items-center">
+                            <div class="col-12 col-lg-6">
+                                <img src="image/Gemini_Generated_Image_2f19n92f19n92f19.png" class="project-img img-fluid slide-in-left" alt="Project Overview Screenshot">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <h3 class="slide-in-right">Project Overview</h3>
+                                <p class="lead slide-in-right delay-1">A dynamic, engaging, and fully responsive website designed to showcase the restaurant's premium quality, inviting ambience, and seamless user experience, powered by a robust reservation system.</p>
+                                <p class="slide-in-right delay-2">The goal was to craft an immersive digital presence that highlights culinary excellence and streamlines bookings for modern diners.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: Design Inspiration -->
+                    <div class="carousel-item">
+                        <div class="row align-items-center">
+                            <div class="col-12 col-lg-6 order-lg-2">
+                                <img src="image/Gemini_Generated_Image_2f19n92f19n92f19.png" class="project-img img-fluid slide-in-right" alt="Design Inspiration">
+                            </div>
+                            <div class="col-12 col-lg-6 order-lg-1">
+                                <h3 class="slide-in-left">Design Inspiration</h3>
+                                <p class="lead slide-in-left delay-1">Drawing from luxurious Middle Eastern aesthetics, the design incorporates warm tones, elegant typography, and fluid animations to evoke the restaurant's sophisticated vibe.</p>
+                                <p class="slide-in-left delay-2">Key inspirations include high-end hospitality sites with parallax scrolling and subtle cultural motifs.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3: Key Features -->
+                    <div class="carousel-item">
+                        <div class="row align-items-start">
+                            <div class="col-12 col-lg-6">
+                                <h3 class="slide-in-left"><span class="icon-dis">💡</span>Key Features</h3>
+                                <ul class="slide-in-left delay-1">
+                                    <li>Dynamic Weather Cycling Animation for an atmospheric homepage</li>
+                                    <li>Seamless Image Carousel showcasing signature dishes and interiors</li>
+                                    <li>Real-time API Integration for effortless reservations and confirmations</li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <img src="image/Gemini_Generated_Image_2f19n92f19n92f19.png" class="project-img img-fluid slide-in-right" alt="Key Features Screenshot">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 4: User Experience -->
+                    <div class="carousel-item">
+                        <div class="row align-items-center">
+                            <div class="col-12 col-lg-6">
+                                <img src="image/Gemini_Generated_Image_2f19n92f19n92f19.png" class="project-img img-fluid slide-in-left" alt="User Experience Flow">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <h3 class="slide-in-right">User Experience</h3>
+                                <p class="lead slide-in-right delay-1">Intuitive navigation ensures users can explore menus, view galleries, and book tables with minimal friction, optimized for touch and mouse interactions.</p>
+                                <p class="slide-in-right delay-2">Accessibility features like ARIA labels and high-contrast modes enhance inclusivity.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 5: Technical Stack -->
+                    <div class="carousel-item">
+                        <div class="row align-items-start">
+                            <div class="col-12 col-lg-6">
+                                <h3 class="slide-in-left"><span class="icon-dis">🔧</span>Technical Stack</h3>
+                                <ul class="slide-in-left delay-1">
+                                    <li>Frontend: HTML5, CSS3, JavaScript with Bootstrap framework</li>
+                                    <li>Animations: CSS transitions and GSAP for smooth effects</li>
+                                    <li>Backend: Node.js with Express for API handling</li>
+                                    <li>Database: MongoDB for reservation data</li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <img src="image/Gemini_Generated_Image_2f19n92f19n92f19.png" class="project-img img-fluid slide-in-right" alt="Tech Stack Diagram">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 6: Results & Impact -->
+                    <div class="carousel-item">
+                        <div class="row align-items-center">
+                            <div class="col-12 col-lg-6 order-lg-2">
+                                <img src="image/Gemini_Generated_Image_2f19n92f19n92f19.png" class="project-img img-fluid slide-in-right" alt="Results Metrics">
+                            </div>
+                            <div class="col-12 col-lg-6 order-lg-1">
+                                <h3 class="slide-in-left">Results & Impact</h3>
+                                <p class="lead slide-in-left delay-1">Post-launch, the site saw a 40% increase in reservation conversions and improved user engagement metrics, solidifying the restaurant's online presence.</p>
+                                <p class="slide-in-left delay-2">Future enhancements include mobile app integration and AI-driven menu recommendations.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Left and Right Controls -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#projectCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#projectCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Example “View” button -->
+      <!-- Project example 2 -->
+ <div class="mt-5 col-md-6 col-lg-4 project-item reveal" data-category="security">
+  <div class="mt-3 project-card card border-0">
+    <div class="position-relative">
+      <i class="icon-dis fa-solid fa-user-secret"></i>
+      <div class="project-badge">Security</div>
+    </div>
+    <div class="p-3">
+      <h5>Web App Audit (sample)</h5>
+      <p class="muted small">Vulnerability assessment &amp; remediation recommendations.</p>
+      <div class="d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-sm btn-outline-primary" id="popoverTrigger" data-bs-toggle="popover" data-bs-trigger="click" data-bs-placement="top" title="Web App Audit Details" data-bs-html="true" data-bs-content="&lt;div class=&quot;popover-body p-3&quot;&gt;&lt;h6 class=&quot;mb-2 text-primary&quot;&gt;Audit Highlights&lt;/h6&gt;&lt;p class=&quot;mb-3 text-muted small&quot;&gt;Comprehensive scanning with Burp Suite identified OWASP Top 10 risks like SQL injection and XSS. Key fixes: input sanitization, JWT hardening, and rate limiting.&lt;/p&gt;&lt;hr class=&quot;my-2&quot;&gt;&lt;p class=&quot;mb-3 text-success small&quot;&gt;&lt;i class=&quot;fa fa-check me-1&quot;&gt;&lt;/i&gt;Full report ready—contact for access!&lt;/p&gt;&lt;button type=&quot;button&quot; class=&quot;btn btn-sm btn-outline-secondary w-100&quot; id=&quot;closePopover&quot;&gt;Got it, Close&lt;/button&gt;&lt;/div&gt;">
+          Details
+        </button>
+        <div class="muted small"><i class="fa fa-shield-halved me-1"></i>Burp Suite</div>
       </div>
-      <div class="overlay-section">Div 2 - Description</div>
-      <div class="overlay-section">Div 3 - Features</div>
-      <div class="overlay-section">Div 4 - Tech Stack</div>
-      <div class="overlay-section">Div 5 - Screenshots</div>
     </div>
   </div>
 </div>
 
-<!-- Example “View” button -->
-
-      <!-- ///////////////////overcassing showcase///////////////////// -->
-
-      <!-- Project example 2 -->
-         <div class="mt-5 col-md-6 col-lg-4 project-item reveal" data-category="security">
-        <div class="mt-3 project-card card border-0">
-          <div class="position-relative">
-            <i class="icon-dis fa-solid fa-user-secret"></i>
-            <div class="project-badge">Security</div>
-          </div>
-          <div class="p-3">
-            <h5>Web App Audit (sample)</h5>
-            <p class="muted small">Vulnerability assessment & remediation recommendations.</p>
-            <div class="d-flex justify-content-between align-items-center">
-              <a href="#" class="btn btn-sm btn-outline-primary">Details</a>
-              <div class="muted small"><i class="fa fa-shield-halved me-1"></i>Burp Suite</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Project example 3 -->
-   <div class="col-md-6 col-lg-4 project-item reveal" data-category="backend">
-        <div class=" project-card card border-0">
-          <div class="position-relative">
-        <i class="icon-dis fa-solid fa-server"></i>
-            <div class="project-badge">Back-End</div>
+   <!-- Project Card -->
+<div class="col-md-6 col-lg-4 project-item reveal" data-category="backend">
+  <div class="project-card card border-0">
+    <div class="position-relative">
+      <i class="icon-dis fa-solid fa-server"></i>
+      <div class="project-badge">Back-End</div>
+    </div>
+    <div class="p-3">
+      <h5>API Service (sample)</h5>
+      <p class="muted small">REST API built with PHP, Laravel, Python, Django, SQL, Node.js and Express.</p>
+      <div class="d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#apiOverviewModal">
+          Repo
+        </button>
+        <div class="muted small"><i class="fa fa-server me-1"></i>Node • Express</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Overview Modal -->
+<div class="modal fade fw-bold " id="apiOverviewModal" tabindex="-1" aria-labelledby="apiOverviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg  fw-bold bg-primary">
+    <div class="modal-content ">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title " id="apiOverviewModalLabel">API Service Overview</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <h6 class="text-primary mb-2"><i class="fa fa-code me-1"></i>Project Highlights</h6>
+            <ul class="list-unstyled small">
+              <li class="mb-1"><i class="fa fa-check text-success me-1"></i>Scalable RESTful API for user authentication, data CRUD operations, and real-time notifications.</li>
+              <li class="mb-1"><i class="fa fa-check text-success me-1"></i>Integrated JWT for secure sessions and rate limiting to prevent abuse.</li>
+              <li class="mb-1"><i class="fa fa-check text-success me-1"></i>Database: PostgreSQL with ORM (Sequelize) for efficient querying.</li>
+            </ul>
           </div>
-          <div class="p-3">
-            <h5>API Service (sample)</h5>
-            <p class="muted small">REST API built with PHP, Laravel, Python, Django, SQL, Node.js and Express.</p>
-            <div class="d-flex justify-content-between align-items-center">
-              <a href="#" class="btn btn-sm btn-outline-primary">Repo</a>
-              <div class="muted small"><i class="fa fa-server me-1"></i>Node • Express</div>
+          <div class="col-md-6">
+            <h6 class="text-primary mb-2"><i class="fa fa-cogs me-1"></i>Tech Stack</h6>
+            <div class="row text-center">
+              <div class="col-3"><i class="fa fa-node-js fa-2x text-info mb-1"></i><br><small>Node.js</small></div>
+              <div class="col-3"><i class="fa fa-bolt fa-2x text-warning mb-1"></i><br><small>Express</small></div>
+              <div class="col-3"><i class="fa fa-database fa-2x text-secondary mb-1"></i><br><small>SQL</small></div>
+              <div class="col-3"><i class="fa fa-key fa-2x text-danger mb-1"></i><br><small>JWT</small></div>
             </div>
           </div>
         </div>
+        <hr class="my-3">
+        <p class="small text-muted mb-3">This sample repo demonstrates a full-stack backend setup deployable to AWS or Heroku. Features include API documentation via Swagger and unit tests with Jest.</p>
+        <div class="d-flex gap-2">
+          <a href="https://github.com/Khalifaabdurrazak/Portfolio-" target="_blank" class="btn btn-sm btn-success bg-primary">View Repo</a>
+          <!-- <a href="#" class="btn btn-sm btn-outline-secondary">Live Demo</a> -->
+        </div>
       </div>
-
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
       <!-- Add more project items as needed - replicate structure and change data-category -->
     </div>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section id="contact" class="bg-light">
+<section id="contact" class="">
   <div class="container">
     <div class="row g-4">
       <div class="col-lg-6 reveal">
-        <div class="card contact-card">
+        <div class="card contact-card bg-primary text-dark">
           <h4>Contact Me</h4>
-          <p class="muted">Want to work together? Send a message — use the form and I'll get back to you.</p>
+          <p class="text-info">Want to work together? Send a message — use the form and I'll get back to you.</p>
 
           <form id="contact-form">
             <div class="mb-3">
               <label class="form-label">Name</label>
-              <input class="form-control" id="name" required>
+              <input class="form-control " id="name" required>
             </div>
             <div class="mb-3">
               <label class="form-label">Email</label>
@@ -596,7 +1112,7 @@
               <textarea class="form-control" id="message" rows="5" required></textarea>
             </div>
             <div>
-              <button class="btn btn-primary" id="send-btn" type="submit"><i class="fa fa-paper-plane me-2"></i>Send</button>
+              <button class="btn btn-info" id="send-btn" type="submit"><i class="fa fa-paper-plane me-2"></i>Send</button>
               <span id="form-status" class="ms-3 muted"></span>
             </div>
           </form>
@@ -606,9 +1122,13 @@
       <div class="col-lg-6 reveal">
         <div class="glass h-100 d-flex flex-column justify-content-center">
           <h5 class="mb-3">Other ways to reach me</h5>
-          <p class="muted mb-1"><i class="fa fa-envelope me-2"></i> your.email@example.com</p>
-          <p class="muted mb-1"><i class="fa fa-phone me-2"></i> +234 000 000 0000</p>
+          <p class="muted mb-1"><i class="fa fa-envelope me-2"></i> abdurrazaksikirullahi@gmail.com</p>
+          <p class="muted mb-1"><i class="fa fa-phone me-2"></i> +234 9036910498 / 8160017176</p>
           <p class="muted mb-1"><i class="fa fa-map-marker-alt me-2"></i> Nigeria</p>
+          <p class="muted mb-1"><i class="fab fa-github me-2"></i> GitHub</p>
+          <p class="muted mb-1"><i class="fab fa-linkedin me-2"></i> linkedin</p>
+          <p class="muted mb-1"><i class="fab fa-facebook me-2"></i> facebook</p>
+          <p class="muted mb-1"><i class="fab fa-whatsapp me-2"></i>whatsapp</p>
 
           <div class="mt-4">
             <a class="btn btn-outline-primary me-2" href="#" id="resume-link" target="_blank"><i class="fa fa-download me-2"></i>Download CV</a>

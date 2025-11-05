@@ -1,97 +1,500 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Abdurrazak Khalifa — Portfolio</title>
-
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Font Awesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Stylized Tornado Background - Real Tones</title>
 <style>
-    *{
-        color: black;
-    }
-    :root{
-      --blue:#0b69ff;
-      --blue-2:#0f4ef0;
-      --muted:#6b7280;
-      /* Define two color sets for the transition */
-      --storm-bg-start: #1e2a38;
-      --storm-bg-end: #0d121c;
-      --sun-bg-start: #78a9f0; /* Lighter blue for clear sky */
-      --sun-bg-end: #ffffff;
-      --text-color: #e0e7ee;
-    }
-    *{box-sizing:border-box}
-    body{
-      font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-      /* Initial state: Storm */
-      background: linear-gradient(180deg, var(--storm-bg-start) 0%, var(--storm-bg-end) 100%);
-      color:var(--text-color);
-      transition: background 60s ease-in-out; /* Smooth 1-minute transition */
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      scroll-behavior:smooth;
-    }
-    /* Sunshine class to be added by JS */
-    body.sunshine{
-        background: linear-gradient(180deg, var(--sun-bg-start) 0%, var(--sun-bg-end) 100%);
-        color: #0b273b; /* Dark text for light background */
-    }
+  :root{
+    --sky-top: #0b1520;     /* deep storm */
+    --sky-mid: #141921;
+    --sky-bottom: #172027;
+    --cloud-light: rgba(255,255,255,0.95);
+    --cloud-mid: rgba(230,235,240,0.85);
+    --cloud-shadow: rgba(20,25,30,0.9);
+    --dust: rgba(90,75,50,0.25);
+  }
 
-    /* Navbar */
-    .navbar{
-      background: rgba(13, 18, 28, 0.85);
-      backdrop-filter: blur(6px);
-      transition: background 60s ease-in-out;
-    }
-    .navbar.sunshine {
-        background: rgba(255, 255, 255, 0.85);
-    }
-    .nav-link { color: rgba(255,255,255,0.9) !important; font-weight:600; transition: color 60s ease-in-out; }
-    .navbar.sunshine .nav-link { color: rgba(11,39,59,0.85) !important; }
-    .navbar-brand { transition: color 60s ease-in-out; }
-    .navbar.sunshine .navbar-brand { color: var(--blue) !important; }
-.text-mu{
-    font-size: 5vh;
-}
-.fa-bars{
-    color: #0f4ef0;
-    font-size: 35px;
-}
-    /* Hero */
+  html,body{
+    height:100%;
+    margin:0;
+    background: linear-gradient(180deg,var(--sky-top) 0%, var(--sky-mid) 55%, var(--sky-bottom) 100%);
+    overflow:hidden;
+    font-family: Inter, system-ui, sans-serif;
+    color:#fff;
+  }
+
+  canvas#tornado {
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    display:block;
+    z-index:0;
+  }
+
+  /* subtle overlay for vignette */
+  .vignette {
+    position:fixed; inset:0; pointer-events:none; z-index:1;
+    background: radial-gradient(60% 45% at 50% 18%, rgba(255,255,255,0.02), transparent 8%),
+                linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.36) 70%);
+    mix-blend-mode:multiply;
+  }
+
+  /* centered demo content (remove if not needed) */
+  .content {
+    position:relative; z-index:2; min-height:100vh;
+    display:flex; align-items:center; justify-content:center; padding:2rem;
+    text-align:center;
+  }
+  .card {
+    background: rgba(10,12,15,0.46);
+    border-radius:12px; padding:1.2rem 1.6rem; max-width:720px;
+    backdrop-filter: blur(6px) saturate(120%);
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  h1{ margin:0 0 .4rem; font-weight:600; font-size:clamp(1.2rem, 2.4vw, 1.8rem) }
+  p { margin:0; opacity:0.9; font-size:0.95rem }
+
+  /* lightning flash */
+  #flash {
+    position:fixed; inset:0; pointer-events:none; z-index:1;
+    background:rgba(255,255,255,0); transition: background 90ms linear;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    canvas#tornado { opacity:0.98; }
+  }
 </style>
 </head>
 <body>
+<canvas id="tornado"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+<div id="flash" aria-hidden="true"></div>
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg fixed-top">
-  <div class="container">
-    <a class="navbar-brand fw-bold text-primary" href="#hero">Abdurrazak Khalifa</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-      <span class="navbar-toggler-icon"><i class="fa fa-bars"></i></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navMenu">
-      <ul class="navbar-nav ms-auto gap-2">
-        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
-        <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
-        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-      </ul>
-    </div>
+<!-- Optional centered content -->
+<div class="content" aria-hidden="false">
+  <div class="card">
+    <h1>Storm Mode — Stylized Tornado</h1>
+    <p>Natural tones, clouds to ground connection, smooth animation — built for portfolio backgrounds.</p>
   </div>
-</nav>
+</div>
 
+<script>
+(() => {
+  const canvas = document.getElementById('tornado');
+  const ctx = canvas.getContext('2d', { alpha: true });
+  let W = canvas.width = innerWidth;
+  let H = canvas.height = innerHeight;
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
-<script src="script.js"></script>
+  // Config
+  const cfg = {
+    funnelHeight: H * 1.25,
+    baseRadius: Math.min(W,H) * 0.18,
+    topRadius: Math.min(W,H) * 0.02,
+    particleCount: Math.round(Math.max(160, (W*H) / 15000)),
+    cloudLayers: 4,
+    cloudSpeed: 0.12,
+    dustCount: 60,
+    lightningChance: 0.0035,
+    timeScale: 0.9 // overall animation speed multiplier
+  };
+
+  // Responsive update
+  function onResize(){
+    W = canvas.width = innerWidth;
+    H = canvas.height = innerHeight;
+    cfg.baseRadius = Math.min(W,H) * 0.18;
+    cfg.topRadius = Math.min(W,H) * 0.02;
+    cfg.funnelHeight = H * 1.25;
+    cfg.particleCount = Math.round(Math.max(120, (W*H) / 15000));
+    init();
+  }
+  addEventListener('resize', onResize, { passive:true });
+
+  // Utility
+  const rnd = (a,b) => a + Math.random()*(b-a);
+  const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+
+  // CLOUDS: layered soft shapes (drawn to an offscreen canvas for performance)
+  let cloudCanv, cloudCtx, clouds = [];
+  function createCloudCanvas(){
+    cloudCanv = document.createElement('canvas');
+    cloudCtx = cloudCanv.getContext('2d');
+    cloudCanv.width = W;
+    cloudCanv.height = H * 0.45; // top area only
+    generateClouds();
+  }
+
+  function generateClouds(){
+    clouds = [];
+    for (let i=0;i<cfg.cloudLayers;i++){
+      const layer = {
+        y: rnd(0.02, 0.18) * H + i * (H*0.03),
+        speed: rnd(0.02, 0.12) * (i+1) * cfg.cloudSpeed,
+        opacity: rnd(0.28, 0.8) * (1 - i*0.12),
+        size: rnd(0.6, 1.6) * (1 + i*0.35),
+        offset: rnd(-W*0.6, W*0.6)
+      };
+      clouds.push(layer);
+    }
+    drawCloudLayer();
+  }
+
+  function drawCloudLayer(){
+    cloudCtx.clearRect(0,0,cloudCanv.width,cloudCanv.height);
+    // layered soft clouds built from many circles
+    for (let i=0;i<clouds.length;i++){
+      const c = clouds[i];
+      const count = 18 + i*6;
+      for (let j=0;j<count;j++){
+        const cx = (j / count) * (W*1.6) - W*0.3 + c.offset + rnd(-120,120);
+        const cy = c.y + rnd(-40,40) * c.size;
+        const r = rnd(80,220) * c.size;
+        const g = cloudCtx.createRadialGradient(cx, cy, r*0.02, cx, cy, r);
+        g.addColorStop(0, `rgba(255,255,255, ${0.95 * c.opacity})`);
+        g.addColorStop(0.55, `rgba(235,240,245, ${0.65 * c.opacity})`);
+        g.addColorStop(1, `rgba(18,20,24, ${0.06 * c.opacity})`);
+        cloudCtx.fillStyle = g;
+        cloudCtx.beginPath();
+        cloudCtx.arc(cx, cy, r, 0, Math.PI*2);
+        cloudCtx.fill();
+      }
+    }
+    // add darker base for clouds (underside)
+    cloudCtx.fillStyle = 'rgba(10,12,14,0.25)';
+    cloudCtx.fillRect(0, cloudCanv.height*0.42, W, cloudCanv.height*0.58);
+  }
+
+  // DUST / GROUND: small particles swirling near the base
+  let dust = [];
+  function initDust(){
+    dust = [];
+    const baseY = H * 0.94;
+    for (let i=0;i<cfg.dustCount;i++){
+      dust.push({
+        x: W/2 + rnd(-cfg.baseRadius*1.2, cfg.baseRadius*1.2),
+        y: baseY + rnd(-6, 20),
+        vx: rnd(-0.3,0.3),
+        vy: rnd(-0.6, -0.1),
+        size: rnd(1.2,6),
+        life: rnd(60, 220),
+        t: Math.random()*1000
+      });
+    }
+  }
+
+  // PARTICLES for funnel
+  let particles = [];
+  function initParticles(){
+    particles = [];
+    for (let i=0;i<cfg.particleCount;i++){
+      particles.push(createParticle(true));
+    }
+  }
+  function createParticle(startInside=false){
+    const layer = Math.floor(Math.random()*5); // visual layer
+    const progress = Math.random(); // from base to top
+    const y = H - progress * cfg.funnelHeight + (Math.random()*40 - 20);
+    const r = rnd(cfg.baseRadius*0.05, cfg.baseRadius*(0.95 - progress*0.85));
+    const angle = Math.random()*Math.PI*2;
+    const size = rnd(0.6, 3.6) * (1 + layer*0.18);
+    const life = rnd(120, 380);
+    return {
+      x: 0, y,
+      r,
+      angle,
+      va: rnd(0.002, 0.02) * (1 + layer*0.6),
+      vy: rnd(-0.18, -0.6) * (1 + layer*0.05),
+      size,
+      life,
+      maxLife: life,
+      layer,
+      wob: rnd(-0.5, 0.5)
+    };
+  }
+
+  // GROUND texture (offscreen) for subtle soil look
+  let groundCanv, groundCtx;
+  function createGroundCanvas(){
+    groundCanv = document.createElement('canvas');
+    groundCtx = groundCanv.getContext('2d');
+    groundCanv.width = W;
+    groundCanv.height = Math.round(H*0.18);
+    // noise-ish gradient
+    const g = groundCtx.createLinearGradient(0,0,0,groundCanv.height);
+    g.addColorStop(0, 'rgba(28,24,20,0.9)');
+    g.addColorStop(1, 'rgba(20,18,16,0.95)');
+    groundCtx.fillStyle = g;
+    groundCtx.fillRect(0,0,groundCanv.width,groundCanv.height);
+    // subtle speckles
+    for (let i=0;i<1200;i++){
+      groundCtx.fillStyle = `rgba(255,255,255,${rnd(0.002,0.02)})`;
+      groundCtx.fillRect(Math.random()*groundCanv.width, Math.random()*groundCanv.height, Math.random()*2, Math.random()*2);
+    }
+  }
+
+  // Lightning control
+  const flashEl = document.getElementById('flash');
+  function doLightning(){
+    flashEl.style.background = 'rgba(255,255,255,0.16)';
+    setTimeout(()=> flashEl.style.background = 'rgba(255,255,255,0)', 70 + Math.random()*140);
+  }
+
+  // init everything
+  function init(){
+    createCloudCanvas();
+    createGroundCanvas();
+    initDust();
+    initParticles();
+  }
+
+  // DRAW helpers
+  function drawSky(){
+    // subtle radial top glow behind clouds
+    const g = ctx.createRadialGradient(W/2, H*0.18, 0, W/2, H*0.35, Math.max(W,H));
+    g.addColorStop(0, 'rgba(64,70,76,0.10)');
+    g.addColorStop(0.55, 'rgba(9,12,16,0.25)');
+    g.addColorStop(1, 'rgba(0,0,0,0.65)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,W,H);
+  }
+
+  let cloudOffset = 0;
+  function drawClouds(dt){
+    cloudOffset += dt * 0.03 * cfg.cloudSpeed;
+    // draw offscreen cloud canvas twice for wrapping parallax-like
+    ctx.save();
+    const cy = 0;
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i=0;i<clouds.length;i++){
+      const c = clouds[i];
+      const speed = c.speed * 0.9;
+      const dx = (cloudOffset * (i+1) * 40) % (W*1.6);
+      // subtle parallax by drawing slice
+      ctx.globalAlpha = c.opacity;
+      ctx.drawImage(cloudCanv, -dx - W*0.25, 0, cloudCanv.width, cloudCanv.height);
+      ctx.drawImage(cloudCanv, -dx - W*0.25 + cloudCanv.width, 0, cloudCanv.width, cloudCanv.height);
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.restore();
+  }
+
+  function drawFunnelBase(cx, cy){
+    // solid base ellipse (ground contact)
+    ctx.save();
+    ctx.beginPath();
+    ctx.ellipse(cx, cy + 18, cfg.baseRadius*1.05, Math.max(22, cfg.baseRadius*0.13), -0.06, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(12,12,12,0.65)';
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawParticles(dt, now){
+    const cx = W/2;
+    const cy = H * 1.02; // slightly below bottom to anchor
+    // update
+    for (let p of particles){
+      p.angle += p.va * dt * cfg.timeScale;
+      p.y += p.vy * dt * cfg.timeScale;
+      p.r *= 1 - (0.0005 * dt);
+      p.life -= dt;
+      p.t = (p.t || 0) + dt;
+      if (p.y < H - cfg.funnelHeight || p.life <= 0 || p.r < cfg.topRadius*0.2){
+        // respawn near base
+        Object.assign(p, createParticle(false));
+        p.y = H + rnd(-30, 60);
+        p.life = p.maxLife;
+      }
+    }
+
+    // depth sort
+    particles.sort((a,b) => (a.y - b.y) + (b.r - a.r) * 0.01);
+
+    // draw
+    for (let p of particles){
+      const progress = clamp((H - p.y) / cfg.funnelHeight, 0, 1);
+      const localRadius = lerp(cfg.baseRadius, cfg.topRadius, progress);
+      const scale = localRadius / Math.max(1,cfg.baseRadius);
+      const px = cx + Math.cos(p.angle) * p.r * scale + p.wob * 22 * (1 - progress);
+      const py = p.y + Math.sin(p.angle*0.33) * 5 * (1 - progress);
+
+      // alt shading: draw a soft glow then small core
+      const alpha = clamp(0.06 + (p.life/p.maxLife)*0.85, 0.02, 0.95) * (0.85 - progress*0.4);
+      const size = p.size * (0.5 + 1.2*(1-progress));
+
+      // glow
+      const g = ctx.createRadialGradient(px, py, 0, px, py, size*8);
+      g.addColorStop(0, `rgba(230,230,235, ${alpha*0.9})`);
+      g.addColorStop(0.3, `rgba(210,210,215, ${alpha*0.45})`);
+      g.addColorStop(1, `rgba(200,200,205, 0)`);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(px, py, size*6, 0, Math.PI*2);
+      ctx.fill();
+
+      // core
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(220,220,225, ${Math.min(0.95, alpha*1.4)})`;
+      ctx.arc(px, py, size, 0, Math.PI*2);
+      ctx.fill();
+
+      // faint streaks for motion
+      ctx.beginPath();
+      ctx.lineWidth = Math.max(0.6, size*0.12);
+      ctx.strokeStyle = `rgba(180,180,190, ${alpha*0.25})`;
+      ctx.moveTo(px - size*1.6, py - size*0.6);
+      ctx.lineTo(px + size*1.6, py + size*0.6);
+      ctx.stroke();
+    }
+  }
+
+  function drawShadedFunnel(now){
+    // shading cone: a soft, semi-transparent cone to give volumetric look
+    const cx = W/2;
+    const baseY = H * 1.02;
+    ctx.save();
+    ctx.translate(cx, baseY);
+    ctx.rotate(-0.01);
+    for (let i=0;i<18;i++){
+      const t = i / 18;
+      const radius = lerp(cfg.baseRadius*(1+t*0.06), cfg.topRadius*(1 - t*0.5), t);
+      const y = -cfg.funnelHeight * t;
+      const alpha = clamp(0.08 * (1 - t) * (1 + Math.sin(now*0.0006 + i)*0.45), 0.01, 0.45);
+      const grad = ctx.createLinearGradient(-radius, y, radius, y);
+      grad.addColorStop(0, `rgba(10,12,14,${alpha*0.9})`);
+      grad.addColorStop(0.5, `rgba(48,50,56,${alpha*0.35})`);
+      grad.addColorStop(1, `rgba(10,12,14, ${alpha*0.6})`);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.ellipse(0, y, radius, Math.max(8, radius*0.14), 0, 0, Math.PI*2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawGround(){
+    // draw ground canvas at bottom
+    const gh = groundCanv.height;
+    ctx.drawImage(groundCanv, 0, H - gh - 2);
+    // subtle reflection/glow near funnel base
+    const cx = W/2;
+    const glow = ctx.createRadialGradient(cx, H - gh*0.8, 0, cx, H - gh*0.8, cfg.baseRadius*1.8);
+    glow.addColorStop(0, 'rgba(150,150,160,0.035)');
+    glow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, H - gh - 6, W, gh + 10);
+  }
+
+  function updateDust(dt){
+    const baseY = H * 0.94;
+    for (let d of dust){
+      // inertia around center, pulled inward and with slight upwards motion
+      const dx = (W/2 - d.x);
+      d.vx += (dx * 0.00028) * dt;
+      d.vy += rnd(-0.001, -0.004) * dt;
+      // rotate around center
+      const ang = Math.atan2(d.y - baseY, d.x - W/2);
+      const speed = 0.0025 + Math.abs(ang*0.0008);
+      const nx = (d.x - W/2) * Math.cos(speed*dt) - (d.y - baseY) * Math.sin(speed*dt);
+      const ny = (d.x - W/2) * Math.sin(speed*dt) + (d.y - baseY) * Math.cos(speed*dt);
+      d.x = W/2 + nx + d.vx * dt * 0.6;
+      d.y = baseY + ny + d.vy * dt * 0.6;
+      d.life -= dt * 0.3;
+      if (d.life <= 0 || Math.abs(d.x - W/2) > cfg.baseRadius*3) {
+        // respawn
+        d.x = W/2 + rnd(-cfg.baseRadius*0.9, cfg.baseRadius*0.9);
+        d.y = baseY + rnd(-6, 18);
+        d.vx = rnd(-0.3,0.3); d.vy = rnd(-0.6, -0.1);
+        d.size = rnd(1.2,6); d.life = rnd(60, 220);
+      }
+    }
+
+    // draw dust
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (let d of dust){
+      const alpha = clamp(0.18 * (d.life / 220), 0.02, 0.6);
+      ctx.beginPath();
+      const g = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.size*8);
+      g.addColorStop(0, `rgba(210,190,160,${alpha})`);
+      g.addColorStop(1, 'rgba(210,190,160,0)');
+      ctx.fillStyle = g;
+      ctx.arc(d.x, d.y, d.size*6, 0, Math.PI*2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(120,100,70,${alpha*0.7})`;
+      ctx.arc(d.x, d.y, d.size*0.9, 0, Math.PI*2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // linear interpolation
+  function lerp(a,b,t){ return a + (b-a)*t; }
+
+  // Main loop
+  let last = performance.now();
+  function loop(now){
+    const rawDt = Math.min(60, now - last);
+    const dt = rawDt;
+    last = now;
+
+    ctx.clearRect(0,0,W,H);
+
+    // backdrop sky
+    drawSky();
+    // clouds at top
+    drawClouds(dt);
+
+    // subtle distant rain/light streaks for atmosphere
+    ctx.save();
+    const rainAlpha = 0.03 + 0.02 * Math.sin(now*0.0009);
+    ctx.globalAlpha = rainAlpha;
+    for (let i=0;i<8;i++){
+      ctx.beginPath();
+      ctx.moveTo((i/8)*W + (now*0.01*(i+1))%W, 0);
+      ctx.lineTo((i/8)*W + (now*0.01*(i+1))%W + 20, H);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(120,130,140,0.03)';
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // funnel shading
+    drawShadedFunnel(now);
+
+    // particles (vortex)
+    drawParticles(dt, now);
+
+    // ground & dust
+    drawGround();
+    updateDust(dt);
+
+    // funnel base shadow
+    drawFunnelBase(W/2, H*1.02);
+
+    // occasional lightning
+    if (Math.random() < cfg.lightningChance) doLightning();
+
+    requestAnimationFrame(loop);
+  }
+
+  // start
+  init();
+  requestAnimationFrame(loop);
+
+  // small helper to respect reduced motion
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  prefersReduced.addEventListener?.('change', e => {
+    if (e.matches) cfg.timeScale = 0.2;
+    else cfg.timeScale = 0.9;
+  });
+  if (prefersReduced.matches) cfg.timeScale = 0.2;
+
+})();
+</script>
 </body>
 </html>
