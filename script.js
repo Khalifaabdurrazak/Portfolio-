@@ -14,7 +14,7 @@ document.getElementById('certs-link').href = "#";
    Typing animation (simple)
    ========================= */
 const typingEl = document.getElementById('typing');
-const phrases = ["Front-End Developer", "Backend Developer", "Cybersecurity Analyst"];
+const phrases = ["Front-End Developer", "Backend Developer", "Cybersecurity Analyst / pentest"];
 let ti = 0, pj = 0, direction = 1;
 
 function typeLoop() {
@@ -298,6 +298,10 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   });
 });
 
+// lol
+
+
+
 
   function openOverlay() {
     document.getElementById("projectOverlay").style.display = "flex";
@@ -306,3 +310,61 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   function closeOverlay() {
     document.getElementById("projectOverlay").style.display = "none";
   }
+
+  
+  // Initialize popover
+const popoverTrigger = document.getElementById('popoverTrigger');
+const popover = new bootstrap.Popover(popoverTrigger, {
+  trigger: 'click',
+  placement: 'top'
+});
+
+// Auto-hide after 4.5 seconds
+popoverTrigger.addEventListener('click', function () {
+  setTimeout(() => {
+    popover.hide();
+  }, 6000);
+});
+
+// Handle close button inside popover
+document.addEventListener('click', function (event) {
+  if (event.target.id === 'closePopover') {
+    popover.hide();
+  }
+});
+
+
+/* =========================
+   Navbar Auto-Close on Click
+   (Mobile Usability Improvement)
+   ========================= */
+
+// Get the collapsed menu element (the one that should close)
+const navMenu = document.getElementById('navMenu');
+
+// Get all the navigation links inside that menu
+const navLinks = document.querySelectorAll('#navMenu .nav-link');
+
+// Check if the menu exists and Bootstrap is loaded
+if (navMenu && window.bootstrap) {
+    // Create a Bootstrap Collapse object instance
+    const bsCollapse = new bootstrap.Collapse(navMenu, {
+        toggle: false // Do not toggle on creation
+    });
+
+    // Add a click listener to every link
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            // Check if the menu is currently visible (expanded on mobile)
+            if (navMenu.classList.contains('show')) {
+                // If it's visible, hide it using the Bootstrap Collapse method
+                bsCollapse.hide();
+            }
+        });
+    });
+}
+
+
+
+
+
